@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: fe88d3ce5de9307418f2c9c2f069a15b
+timeCreated: 1492742818
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: SparTakus
+  fontNames:
+  - SparTakus
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
