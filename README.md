@@ -1,2 +1,2 @@
 # Project Haunt
-A 2D tile-based game where hunters and monsters fight to eliminate the other team.
+A 3D castle-defense game where the player builds their own castle to defend against incoming hordes of enemies.
