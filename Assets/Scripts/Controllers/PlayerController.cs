@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField]
-    private float m_MovementSpeed;
-
-    [SerializeField]
-    private float m_RotationSpeed;
+    [SerializeField] private float m_MovementSpeed;
+    [SerializeField] private float m_RotationSpeed;
 
     private int m_EnvironmentMask;
     private int m_MaxRayLength = 100;
