@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CFade : MonoBehaviour
+public class Fade : MonoBehaviour
 {
     public float FadeInTime;
 

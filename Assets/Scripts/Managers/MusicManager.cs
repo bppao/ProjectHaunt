@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class CMusicManager : MonoBehaviour
+public class MusicManager : MonoBehaviour
 {
     public AudioClip[] LevelMusicChangeArray;
 
@@ -18,9 +18,9 @@ public class CMusicManager : MonoBehaviour
     {
         m_AudioSource = GetComponent<AudioSource>();
 
-        if (CPlayerPrefsManager.HasAnyPreferences())
+        if (PlayerPrefsManager.HasAnyPreferences())
         {
-            m_AudioSource.volume = CPlayerPrefsManager.GetMasterVolume();
+            m_AudioSource.volume = PlayerPrefsManager.GetMasterVolume();
         }
 
         SceneManager.sceneLoaded += OnSceneLoaded;

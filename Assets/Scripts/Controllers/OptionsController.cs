@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class COptionsController : MonoBehaviour
+public class OptionsController : MonoBehaviour
 {
     public Slider VolumeSlider, DifficultySlider;
 
-    private CLevelManager m_LevelManager;
-    private CMusicManager m_MusicManager;
+    private LevelManager m_LevelManager;
+    private MusicManager m_MusicManager;
 
     private void Start()
     {
-        m_LevelManager = FindObjectOfType<CLevelManager>();
-        m_MusicManager = FindObjectOfType<CMusicManager>();
+        m_LevelManager = FindObjectOfType<LevelManager>();
+        m_MusicManager = FindObjectOfType<MusicManager>();
 
-        if (CPlayerPrefsManager.HasAnyPreferences())
+        if (PlayerPrefsManager.HasAnyPreferences())
         {
-            VolumeSlider.value = CPlayerPrefsManager.GetMasterVolume();
-            DifficultySlider.value = CPlayerPrefsManager.GetDifficulty();
+            VolumeSlider.value = PlayerPrefsManager.GetMasterVolume();
+            DifficultySlider.value = PlayerPrefsManager.GetDifficulty();
         }
         else
         {
@@ -36,8 +36,8 @@ public class COptionsController : MonoBehaviour
 
     public void SaveAndExit()
     {
-        CPlayerPrefsManager.SetMasterVolume(VolumeSlider.value);
-        CPlayerPrefsManager.SetDifficulty(DifficultySlider.value);
+        PlayerPrefsManager.SetMasterVolume(VolumeSlider.value);
+        PlayerPrefsManager.SetDifficulty(DifficultySlider.value);
         m_LevelManager.LoadLevel("01a Start");
     }
 

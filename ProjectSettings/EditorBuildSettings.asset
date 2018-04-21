@@ -16,7 +16,7 @@ EditorBuildSettings:
     guid: 3ec97830495b5404cbaa016095981cb9
   - enabled: 1
     path: Assets/_Scenes/02 Game.unity
-    guid: b24fe756df88baa408148760ee3f96f2
+    guid: 10a0a5ad9444e4244a2fff518333efaf
   - enabled: 1
     path: Assets/_Scenes/03a Win.unity
     guid: 1677e0ce8ff6bc54d8a6bb2e2a03bbb2

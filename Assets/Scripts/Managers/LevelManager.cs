@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class CLevelManager : MonoBehaviour
+public class LevelManager : MonoBehaviour
 {
     public float AutoLoadNextLevelAfter;
 

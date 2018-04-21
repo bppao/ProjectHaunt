@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class CPlayerPrefsManager : MonoBehaviour
+public class PlayerPrefsManager : MonoBehaviour
 {
-    const string MASTER_VOLUME_KEY = "master_volume";
-    const string DIFFICULTY_KEY = "difficulty";
-    const string LEVEL_KEY = "level_unlocked_";
+    private const string MASTER_VOLUME_KEY = "master_volume";
+    private const string DIFFICULTY_KEY = "difficulty";
+    private const string LEVEL_KEY = "level_unlocked_";
 
     public static bool HasAnyPreferences()
     {
