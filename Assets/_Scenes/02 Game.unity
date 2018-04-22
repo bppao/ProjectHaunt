@@ -208,11 +208,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Target: {fileID: 305387992}
-  m_Distance: 0
-  m_Height: 0
-  m_SmoothLag: 0
-  m_MaxFollowSpeed: 0
-  m_ClampHeadPosition: 0
+  m_SmoothSpeed: 25
+  m_Offset: {x: 0, y: 1.8, z: -6}
 --- !u!1001 &237225770
 Prefab:
   m_ObjectHideFlags: 0
