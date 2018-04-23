@@ -10,7 +10,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Vector3 m_Offset;
 
     private int m_EnvironmentMask;
-    private int m_MaxRayLength = 100;
+    private const int MAX_RAY_LENGTH = 100;
 
     // Use this for initialization
     private void Start()
@@ -45,7 +45,7 @@ public class CameraFollow : MonoBehaviour
         Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(mouseRay, out hit, m_MaxRayLength, m_EnvironmentMask))
+        if (Physics.Raycast(mouseRay, out hit, MAX_RAY_LENGTH, m_EnvironmentMask))
         {
             Debug.DrawLine(mouseRay.origin, mouseRay.direction * 100, Color.red);
             m_Target.LookAt(hit.point);
