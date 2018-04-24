@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody m_Rigidbody;
     private Collider m_Collider;
+    private bool m_JumpButtonPressed;
     private const float GROUND_CHECK_TOLERANCE = 0.1f;
 
     // Use this for initialization
@@ -22,6 +23,11 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         Move();
+    }
+
+    // FixedUpdate() runs during the physics loop. Perform any physics-based code here.
+    private void FixedUpdate()
+    {
         Jump();
     }
 
@@ -30,6 +36,12 @@ public class PlayerController : MonoBehaviour
         // Get the user movement input
         float translation = Input.GetAxisRaw("Vertical");
         float strafeTranslation = Input.GetAxisRaw("Horizontal");
+
+        // Did the user hit the jump button and are we grounded?
+        if (Input.GetButtonDown("Jump") && IsGrounded())
+        {
+            m_JumpButtonPressed = true;
+        }
 
         // Create a new translation vector, normalize it so the player does not
         // gain an advantage when using multiple additive input keys, multiply it
@@ -40,9 +52,10 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetButtonDown("Jump") && IsGrounded())
+        if (m_JumpButtonPressed)
         {
-            m_Rigidbody.AddForce(Vector3.up * m_JumpStrength);
+            m_Rigidbody.AddForce(Vector3.up * m_JumpStrength, ForceMode.Impulse);
+            m_JumpButtonPressed = false;
         }
     }
 
