@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float m_MovementSpeed;
     [SerializeField] private float m_JumpStrength;
+    [SerializeField] private float m_FallMultiplier;
+    [SerializeField] private float m_LowJumpMultiplier;
 
     private Rigidbody m_Rigidbody;
     private Collider m_Collider;
@@ -29,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         Jump();
+        AdjustGravity();
     }
 
     private void Move()
@@ -57,6 +60,24 @@ public class PlayerController : MonoBehaviour
             m_Rigidbody.AddForce(Vector3.up * m_JumpStrength, ForceMode.Impulse);
             m_JumpButtonPressed = false;
         }
+    }
+
+    private void AdjustGravity()
+    {
+        Vector3 newGravity = Physics.gravity.y * Vector3.up;
+
+        if (m_Rigidbody.velocity.y < 0f)
+        {
+            // Falling
+            newGravity = m_FallMultiplier * newGravity;
+        }
+        else if (m_Rigidbody.velocity.y > 0f && !Input.GetButton("Jump"))
+        {
+            // Just tapping the jump button
+            newGravity = m_LowJumpMultiplier * newGravity;
+        }
+
+        m_Rigidbody.AddForce(newGravity, ForceMode.Acceleration);
     }
 
     private bool IsGrounded()
