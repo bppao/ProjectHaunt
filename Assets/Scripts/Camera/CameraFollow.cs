@@ -16,15 +16,14 @@ public class CameraFollow : MonoBehaviour
     private void Start()
     {
         m_EnvironmentMask = LayerMask.GetMask("Environment");
-    }
 
-    // Use LateUpdate() because it is called after the normal Update() loop
-    // where the player's transform is being updated
-    private void LateUpdate()
-    {
         // Keep the cursor locked to the center of the screen
         Cursor.lockState = CursorLockMode.Locked;
+    }
 
+    // FixedUpdate() runs during the physics loop. Perform any physics-based code here.
+    private void FixedUpdate()
+    {
         Rotate();
         PlayerLookAtMouse();
         FollowPlayer();

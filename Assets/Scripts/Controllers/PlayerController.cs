@@ -24,12 +24,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        Move();
+        // Did the user hit the jump button and are we grounded?
+        if (Input.GetButtonDown("Jump") && IsGrounded())
+        {
+            m_JumpButtonPressed = true;
+        }
     }
-
+    
     // FixedUpdate() runs during the physics loop. Perform any physics-based code here.
     private void FixedUpdate()
     {
+        Move();
         Jump();
         AdjustGravity();
     }
@@ -39,12 +44,6 @@ public class PlayerController : MonoBehaviour
         // Get the user movement input
         float translation = Input.GetAxisRaw("Vertical");
         float strafeTranslation = Input.GetAxisRaw("Horizontal");
-
-        // Did the user hit the jump button and are we grounded?
-        if (Input.GetButtonDown("Jump") && IsGrounded())
-        {
-            m_JumpButtonPressed = true;
-        }
 
         // Create a new translation vector, normalize it so the player does not
         // gain an advantage when using multiple additive input keys, multiply it
