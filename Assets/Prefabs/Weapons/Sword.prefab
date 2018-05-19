@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33506406829707732}
   - component: {fileID: 65984041807573084}
   - component: {fileID: 23774262872481284}
+  - component: {fileID: 95361440251808640}
   - component: {fileID: 114240711757612310}
   m_Layer: 0
   m_Name: Sword
@@ -96,6 +97,23 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &95361440251808640
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1241056815164822}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d96db58e000bd6f4483c057af92ea123, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114240711757612310
 MonoBehaviour:
   m_ObjectHideFlags: 1
