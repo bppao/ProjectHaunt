@@ -4,4 +4,11 @@ using UnityEngine;
 
 public class Sword : BaseWeapon
 {
+    public override void PerformAttack()
+    {
+        // Don't allow multiple attacks to queue up if the player is spamming the attack button
+        if (IsAttacking) return;
+
+        Animator.SetTrigger(BASE_ATTACK_ANIM_TRIGGER);
+    }
 }

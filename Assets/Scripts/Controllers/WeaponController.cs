@@ -21,6 +21,12 @@ public class WeaponController : MonoBehaviour
         {
             EquipWeapon();
         }
+
+        if (Input.GetButtonDown("BaseAttack"))
+        {
+            if (m_EquippedWeapon == null) return;
+            m_EquippedWeapon.PerformAttack();
+        }
     }
 
     private void EquipWeapon()
