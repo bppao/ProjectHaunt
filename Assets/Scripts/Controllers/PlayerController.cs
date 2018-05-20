@@ -5,38 +5,34 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float m_MovementSpeed;
+    [SerializeField] private float m_GravityStrength;
     [SerializeField] private float m_JumpStrength;
     [SerializeField] private float m_FallMultiplier;
     [SerializeField] private float m_LowJumpMultiplier;
+    [SerializeField] private bool m_DrawGroundCheckGizmo;
 
-    private Rigidbody m_Rigidbody;
-    private Collider m_Collider;
+    private CharacterController m_CharacterController;
+    private Vector3 m_NewTranslation;
+    private float m_VerticalVelocity;
     private bool m_JumpButtonPressed;
-    private const float GROUND_CHECK_TOLERANCE = 0.1f;
+    private const float GROUND_CHECK_TOLERANCE = 0.3f;
+    private const float CENTER = 0.5f;
 
     // Use this for initialization
     private void Start()
     {
-        m_Rigidbody = GetComponent<Rigidbody>();
-        m_Collider = GetComponent<Collider>();
+        m_CharacterController = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
     private void Update()
     {
-        // Did the user hit the jump button and are we grounded?
-        if (Input.GetButtonDown("Jump") && IsGrounded())
-        {
-            m_JumpButtonPressed = true;
-        }
+        Move();
     }
-    
-    // FixedUpdate() runs during the physics loop. Perform any physics-based code here.
+
     private void FixedUpdate()
     {
-        Move();
         Jump();
-        AdjustGravity();
     }
 
     private void Move()
@@ -45,47 +41,81 @@ public class PlayerController : MonoBehaviour
         float translation = Input.GetAxisRaw("Vertical");
         float strafeTranslation = Input.GetAxisRaw("Horizontal");
 
-        // Create a new translation vector, normalize it so the player does not
+        // Set the new translation vector, normalize it so the player does not
         // gain an advantage when using multiple additive input keys, multiply it
         // by the movement speed, and make it frame-independent
-        Vector3 newTranslation = new Vector3(strafeTranslation, 0f, translation);
-        transform.Translate(newTranslation.normalized * m_MovementSpeed * Time.deltaTime);
-    }
+        m_NewTranslation.Set(strafeTranslation, 0f, translation);
+        m_NewTranslation = Camera.main.transform.TransformDirection(m_NewTranslation);
+        m_NewTranslation = m_NewTranslation.normalized * m_MovementSpeed * Time.deltaTime;
 
-    private void Jump()
-    {
-        if (m_JumpButtonPressed)
+        // Did the user hit the jump button and are we grounded?
+        if (Input.GetButtonDown("Jump") && IsGrounded())
         {
-            m_Rigidbody.AddForce(Vector3.up * m_JumpStrength, ForceMode.Impulse);
-            m_JumpButtonPressed = false;
+            m_JumpButtonPressed = true;
         }
+
+        AdjustGravity();
+
+        m_CharacterController.Move(m_NewTranslation);
     }
 
     private void AdjustGravity()
     {
-        Vector3 newGravity = Physics.gravity.y * Vector3.up;
+        float adjustedGravity = m_GravityStrength;
 
-        if (m_Rigidbody.velocity.y < 0f)
+        if (m_CharacterController.velocity.y < 0f)
         {
             // Falling
-            newGravity = m_FallMultiplier * newGravity;
+            adjustedGravity *= m_FallMultiplier;
         }
-        else if (m_Rigidbody.velocity.y > 0f && !Input.GetButton("Jump"))
+        else if (m_CharacterController.velocity.y > 0f && !Input.GetButton("Jump"))
         {
             // Just tapping the jump button
-            newGravity = m_LowJumpMultiplier * newGravity;
+            adjustedGravity *= m_LowJumpMultiplier;
         }
 
-        m_Rigidbody.AddForce(newGravity, ForceMode.Acceleration);
+        // Apply gravity
+        m_VerticalVelocity = m_VerticalVelocity - adjustedGravity * Time.deltaTime;
+        m_NewTranslation.y = m_VerticalVelocity * Time.deltaTime;
     }
 
+    private void Jump()
+    {
+        if (IsGrounded())
+        {
+            // If we're grounded, zero out the vertical velocity
+            m_VerticalVelocity = 0f;
+        }
+
+        if (m_JumpButtonPressed)
+        {
+            m_VerticalVelocity += m_JumpStrength;
+            m_JumpButtonPressed = false;
+        }
+    }
+
+    // NOTE: Unity's CharacterController class has an "isGrounded" property, however
+    // testing has found it to be unreliable, so implement our own ground check code
     private bool IsGrounded()
     {
-        // Cast a ray downwards from the player with length equal to the height of
-        // the collider plus some tolerance
-        return Physics.Raycast(
-            transform.position,
-            Vector3.down,
-            m_Collider.bounds.extents.y + GROUND_CHECK_TOLERANCE);
+        // Create a sphere at the bottom of our player to check for collisions
+        Collider[] collidedObjects = Physics.OverlapSphere(
+            m_CharacterController.transform.position + Vector3.down * (m_CharacterController.height * CENTER - GROUND_CHECK_TOLERANCE),
+            m_CharacterController.radius,
+            Camera.main.GetComponent<CameraFollow>().EnvironmentMask);
+
+        // If the array is not empty, then the player is colliding with the ground
+        return collidedObjects.Length > 0;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (!m_DrawGroundCheckGizmo) return;
+
+        // Used to visualize the ground check sphere
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(
+            m_CharacterController.transform.position + Vector3.down * (m_CharacterController.height * CENTER - GROUND_CHECK_TOLERANCE),
+            m_CharacterController.radius);
     }
 }

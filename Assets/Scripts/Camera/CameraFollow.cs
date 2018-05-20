@@ -10,6 +10,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Vector3 m_Offset;
 
     private int m_EnvironmentMask;
+    public int EnvironmentMask { get { return m_EnvironmentMask; } }
     private const int MAX_RAY_LENGTH = 100;
 
     // Use this for initialization
@@ -21,8 +22,9 @@ public class CameraFollow : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    // FixedUpdate() runs during the physics loop. Perform any physics-based code here.
-    private void FixedUpdate()
+    // LateUpdate() runs right after Update(), so this ensures that all of the
+    // player's movement has been calculated before the camera's movement is calculated
+    private void LateUpdate()
     {
         Rotate();
         PlayerLookAtMouse();
