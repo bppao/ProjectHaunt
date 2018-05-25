@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,5 +11,11 @@ public class Sword : BaseWeapon
         if (IsAttacking) return;
 
         Animator.SetTrigger(BASE_ATTACK_ANIM_TRIGGER);
+    }
+
+    public override void PerformSpecialAbility()
+    {
+        // TODO: Implement
+        throw new NotImplementedException();
     }
 }

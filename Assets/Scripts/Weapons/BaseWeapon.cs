@@ -24,4 +24,19 @@ public abstract class BaseWeapon : MonoBehaviour
     }
 
     public abstract void PerformAttack();
+    public abstract void PerformSpecialAbility();
+
+    private void OnTriggerEnter(Collider otherCollider)
+    {
+        // Prevent hitting the player with their own weapon
+        PlayerController player = otherCollider.GetComponent<PlayerController>();
+        if (player != null) return;
+
+        Debug.Log("Hit: " + otherCollider.name);
+
+        // Only take damage if an enemy was hit
+        BaseEnemy enemy = otherCollider.GetComponent<BaseEnemy>();
+        if (enemy == null) return;
+        enemy.TakeDamage(m_Damage);
+    }
 }
