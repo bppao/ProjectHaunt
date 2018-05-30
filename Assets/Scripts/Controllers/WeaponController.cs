@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    [SerializeField] private Sword m_Sword;
+    [SerializeField]
+    private Sword m_Sword;
 
     private Transform m_PlayerHand;
     private BaseWeapon m_EquippedWeapon;
+    public BaseWeapon EquippedWeapon { get { return m_EquippedWeapon; } }
+    public bool IsWeaponEquipped { get { return m_EquippedWeapon != null; } }
 
     private void Start()
     {
-        // Assumes the player hand transform is the first child
-        m_PlayerHand = transform.GetChild(0);
+        // Find the player hand transform
+        m_PlayerHand = GameObject.Find(name + "Hand").transform;
     }
 
     private void Update()
@@ -24,14 +27,14 @@ public class WeaponController : MonoBehaviour
 
         if (Input.GetButtonDown("BaseAttack"))
         {
-            if (m_EquippedWeapon == null) return;
+            if (!IsWeaponEquipped) return;
             m_EquippedWeapon.PerformAttack();
         }
     }
 
     private void EquipWeapon()
     {
-        if (m_EquippedWeapon != null)
+        if (IsWeaponEquipped)
         {
             Debug.Log("Weapon already equipped!");
             return;

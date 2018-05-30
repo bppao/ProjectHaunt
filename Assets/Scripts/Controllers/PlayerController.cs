@@ -11,15 +11,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float m_LowJumpMultiplier;
     [SerializeField] private bool m_DrawGroundCheckGizmo;
 
+    private const float GROUND_CHECK_TOLERANCE = 0.3f;
+    private const float CENTER = 0.5f;
+
     private CharacterController m_CharacterController;
     private Vector3 m_NewTranslation;
     private float m_VerticalVelocity;
     private bool m_JumpButtonPressed;
-    private const float GROUND_CHECK_TOLERANCE = 0.3f;
-    private const float CENTER = 0.5f;
 
     // Use this for initialization
-    private void Start()
+    protected virtual void Start()
     {
         m_CharacterController = GetComponent<CharacterController>();
     }

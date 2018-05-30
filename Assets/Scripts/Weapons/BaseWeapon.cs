@@ -29,7 +29,7 @@ public abstract class BaseWeapon : MonoBehaviour
     private void OnTriggerEnter(Collider otherCollider)
     {
         // Prevent hitting the player with their own weapon
-        PlayerController player = otherCollider.GetComponent<PlayerController>();
+        BaseCharacter player = otherCollider.GetComponent<BaseCharacter>();
         if (player != null) return;
 
         Debug.Log("Hit: " + otherCollider.name);
