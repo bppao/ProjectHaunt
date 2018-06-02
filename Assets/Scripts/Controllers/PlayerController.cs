@@ -13,22 +13,38 @@ public class PlayerController : MonoBehaviour
 
     private const float GROUND_CHECK_TOLERANCE = 0.3f;
     private const float CENTER = 0.5f;
+    private const float CAPSULE_CAST_DISTANCE = 0.15f;
 
     private CharacterController m_CharacterController;
+    public Camera MainCamera { get; private set; }
     private Vector3 m_NewTranslation;
     private float m_VerticalVelocity;
     private bool m_JumpButtonPressed;
+    private int m_EnemyMask;
 
     // Use this for initialization
     protected virtual void Start()
     {
         m_CharacterController = GetComponent<CharacterController>();
+        MainCamera = Camera.main;
+        m_EnemyMask = LayerMask.GetMask("Enemy");
     }
 
     // Update is called once per frame
     private void Update()
     {
         Move();
+    }
+
+    // LateUpdate is called right after Update
+    private void LateUpdate()
+    {
+        // Check if the player is colliding with an enemy this frame. If so, move the player
+        // slightly in the direction of the hit's normal. This mitigates an issue where
+        // CharacterControllers "step over" kinematic rigidbodies when they have some momentum.
+        // It's important that we do this check after the CharacterController's movement from the
+        // player's input is finished, which is why we check in LateUpdate().
+        CheckCollisions();
     }
 
     private void FixedUpdate()
@@ -46,7 +62,7 @@ public class PlayerController : MonoBehaviour
         // gain an advantage when using multiple additive input keys, multiply it
         // by the movement speed, and make it frame-independent
         m_NewTranslation.Set(strafeTranslation, 0f, translation);
-        m_NewTranslation = Camera.main.transform.TransformDirection(m_NewTranslation);
+        m_NewTranslation = MainCamera.transform.TransformDirection(m_NewTranslation);
         m_NewTranslation = m_NewTranslation.normalized * m_MovementSpeed * Time.deltaTime;
 
         // Did the user hit the jump button and are we grounded?
@@ -103,13 +119,38 @@ public class PlayerController : MonoBehaviour
         Collider[] collidedObjects = Physics.OverlapSphere(
             m_CharacterController.transform.position + Vector3.down * (m_CharacterController.height * CENTER - GROUND_CHECK_TOLERANCE),
             m_CharacterController.radius,
-            Camera.main.GetComponent<CameraFollow>().EnvironmentMask);
+            MainCamera.GetComponent<CameraFollow>().EnvironmentMask);
 
         // If the array is not empty, then the player is colliding with the ground
         return collidedObjects.Length > 0;
     }
 
-    void OnDrawGizmos()
+    private void CheckCollisions()
+    {
+        // Calculate the bottom and top points of the CharacterController for the capsule cast
+        Vector3 characterBottom =
+            m_CharacterController.transform.position + Vector3.down * (m_CharacterController.height * CENTER);
+        Vector3 characterTop = characterBottom + Vector3.up * m_CharacterController.height;
+
+        // Cast a capsule in the direction of the CharacterController's current movement to check
+        // if we hit an enemy this frame
+        RaycastHit hit;
+        if (Physics.CapsuleCast(
+            characterBottom,
+            characterTop,
+            m_CharacterController.radius,
+            m_NewTranslation,
+            out hit,
+            CAPSULE_CAST_DISTANCE,
+            m_EnemyMask))
+        {
+            // We hit an enemy. Move the player slightly in the direction of the hit's normal
+            // (i.e., the opposite direction).
+            m_CharacterController.Move(hit.normal * (CAPSULE_CAST_DISTANCE - hit.distance));
+        }
+    }
+
+    private void OnDrawGizmos()
     {
         if (!m_DrawGroundCheckGizmo) return;
 

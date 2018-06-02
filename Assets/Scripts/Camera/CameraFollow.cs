@@ -9,14 +9,16 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private float m_RotationSpeed;
     [SerializeField] private Vector3 m_Offset;
 
-    private int m_EnvironmentMask;
-    public int EnvironmentMask { get { return m_EnvironmentMask; } }
     private const int MAX_RAY_LENGTH = 100;
+
+    public int EnvironmentMask { get; private set; }
+    private Camera m_MainCamera;
 
     // Use this for initialization
     private void Start()
     {
-        m_EnvironmentMask = LayerMask.GetMask("Environment");
+        EnvironmentMask = LayerMask.GetMask("Environment");
+        m_MainCamera = Camera.main;
 
         // Keep the cursor locked to the center of the screen
         Cursor.lockState = CursorLockMode.Locked;
@@ -43,10 +45,10 @@ public class CameraFollow : MonoBehaviour
     private void PlayerLookAtMouse()
     {
         // Create a ray based on the current mouse position
-        Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray mouseRay = m_MainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(mouseRay, out hit, MAX_RAY_LENGTH, m_EnvironmentMask))
+        if (Physics.Raycast(mouseRay, out hit, MAX_RAY_LENGTH, EnvironmentMask))
         {
             Debug.DrawLine(mouseRay.origin, mouseRay.direction * 100, Color.red);
             m_Target.LookAt(hit.point);

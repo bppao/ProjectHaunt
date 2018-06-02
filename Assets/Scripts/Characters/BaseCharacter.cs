@@ -21,7 +21,7 @@ public class BaseCharacter : PlayerController
         m_Animator = GetComponent<Animator>();
         m_PlayerController = GetComponent<PlayerController>();
         m_WeaponController = GetComponent<WeaponController>();
-        m_CameraFollow = Camera.main.GetComponent<CameraFollow>();
+        m_CameraFollow = MainCamera.GetComponent<CameraFollow>();
 
         m_CurrentHealth = m_MaxHealth;
     }

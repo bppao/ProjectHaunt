@@ -23,7 +23,7 @@ public class BaseEnemy : MonoBehaviour
     private NavMeshAgent m_NavMeshAgent;
 
     private float m_CurrentHealth;
-    private bool m_IsAlive { get { return m_CurrentHealth > 0f; } }
+    public bool IsAlive { get { return m_CurrentHealth > 0f; } }
     private bool m_FadingOut;
     private float m_AttackTimer;
 
@@ -46,7 +46,7 @@ public class BaseEnemy : MonoBehaviour
 
     private void Update()
     {
-        if (m_IsAlive && m_Player.IsAlive)
+        if (IsAlive && m_Player.IsAlive)
         {
             // Head towards the player if both the enemy and player are alive
             m_NavMeshAgent.SetDestination(m_Player.transform.position);
@@ -95,7 +95,7 @@ public class BaseEnemy : MonoBehaviour
     {
         // The enemy can attack the player if both are alive, if enough time has elapsed since
         // the last time it attacked, and if it's in range
-        return m_IsAlive && m_Player.IsAlive &&
+        return IsAlive && m_Player.IsAlive &&
             m_AttackTimer > m_TimeBetweenAttacks &&
             Vector3.Distance(transform.position, m_Player.transform.position) < m_MinAttackDistance;
     }
@@ -105,7 +105,7 @@ public class BaseEnemy : MonoBehaviour
         m_CurrentHealth -= damageAmount;
         Debug.Log(name + "'s CurrentHealth: " + m_CurrentHealth);
 
-        if (!m_IsAlive)
+        if (!IsAlive)
         {
             Die();
         }
@@ -116,6 +116,10 @@ public class BaseEnemy : MonoBehaviour
         // Ensure the dead enemy can no longer collide with the player and ignore physics
         m_Collider.isTrigger = true;
         m_Rigidbody.isKinematic = true;
+
+        // Remove the enemy from the "Enemy" layer so that the player is not checking for
+        // collisions with dead enemies
+        gameObject.layer = LayerMask.GetMask("Default");
 
         // Play the enemy's death animation
         m_Animator.SetTrigger(BASE_ENEMY_DEATH_ANIM_TRIGGER);

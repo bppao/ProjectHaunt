@@ -34,9 +34,11 @@ public abstract class BaseWeapon : MonoBehaviour
 
         Debug.Log("Hit: " + otherCollider.name);
 
-        // Only take damage if an enemy was hit
+        // Only take damage if an enemy was hit and is still alive
         BaseEnemy enemy = otherCollider.GetComponent<BaseEnemy>();
-        if (enemy == null) return;
-        enemy.TakeDamage(m_Damage);
+        if (enemy != null && enemy.IsAlive)
+        {
+            enemy.TakeDamage(m_Damage);
+        }
     }
 }
