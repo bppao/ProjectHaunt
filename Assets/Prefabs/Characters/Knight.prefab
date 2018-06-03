@@ -179,6 +179,10 @@ MonoBehaviour:
   m_LowJumpMultiplier: 1.5
   m_DrawGroundCheckGizmo: 0
   m_MaxHealth: 500
+  m_HealthBar: {fileID: 0}
+  m_DamageImage: {fileID: 0}
+  m_DamageFlashColor: {r: 1, g: 0, b: 0, a: 0.29411766}
+  m_DamageFlashSpeed: 1.5
 --- !u!114 &114905873830258982
 MonoBehaviour:
   m_ObjectHideFlags: 1

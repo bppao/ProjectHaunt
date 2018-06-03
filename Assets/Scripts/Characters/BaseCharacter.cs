@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class BaseCharacter : PlayerController
 {
     [SerializeField] private float m_MaxHealth;
+    [SerializeField] private Image m_HealthBar;
+    [SerializeField] private Image m_DamageImage;
+    [SerializeField] private Color m_DamageFlashColor;
+    [SerializeField] private float m_DamageFlashSpeed;
 
     private const string BASE_CHARACTER_DEATH_ANIM_TRIGGER = "BaseCharacterDeath";
 
@@ -10,6 +15,8 @@ public class BaseCharacter : PlayerController
     private PlayerController m_PlayerController;
     private WeaponController m_WeaponController;
     private CameraFollow m_CameraFollow;
+    private Text m_HealthBarText;
+    private bool m_Damaged;
 
     private float m_CurrentHealth;
     public bool IsAlive { get { return m_CurrentHealth > 0f; } }
@@ -24,12 +31,29 @@ public class BaseCharacter : PlayerController
         m_CameraFollow = MainCamera.GetComponent<CameraFollow>();
 
         m_CurrentHealth = m_MaxHealth;
+        m_HealthBarText = m_HealthBar.GetComponentInChildren<Text>();
+        m_HealthBarText.text = m_CurrentHealth + " / " + m_MaxHealth;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        // Flash the damage image if we just took damage
+        m_DamageImage.color = m_Damaged ? m_DamageFlashColor :
+            Color.Lerp(m_DamageImage.color, Color.clear, m_DamageFlashSpeed * Time.deltaTime);
+
+        m_Damaged = false;
     }
 
     public void TakeDamage(float damageAmount)
     {
+        m_Damaged = true;
         m_CurrentHealth -= damageAmount;
-        Debug.Log(name + "'s CurrentHealth: " + m_CurrentHealth);
+
+        // Update the player's health bar
+        m_HealthBar.fillAmount = m_CurrentHealth / m_MaxHealth;
+        m_HealthBarText.text = m_CurrentHealth + " / " + m_MaxHealth;
 
         if (!IsAlive)
         {
