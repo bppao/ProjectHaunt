@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
         Collider[] collidedObjects = Physics.OverlapSphere(
             m_CharacterController.transform.position + Vector3.down * (m_CharacterController.height * CENTER - GROUND_CHECK_TOLERANCE),
             m_CharacterController.radius,
-            MainCamera.GetComponent<CameraFollow>().EnvironmentMask);
+            MainCamera.GetComponent<CameraFollow>().EnvironmentMask | m_EnemyMask);
 
         // If the array is not empty, then the player is colliding with the ground
         return collidedObjects.Length > 0;
