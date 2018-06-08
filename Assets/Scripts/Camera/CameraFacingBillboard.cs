@@ -13,4 +13,9 @@ public class CameraFacingBillboard : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(m_Camera.transform.forward);
         transform.rotation = targetRotation;
     }
+
+    public void SetCamera(Camera newCamera)
+    {
+        m_Camera = newCamera;
+    }
 }
