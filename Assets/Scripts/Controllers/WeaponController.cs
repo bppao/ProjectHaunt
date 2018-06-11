@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class WeaponController : MonoBehaviour
 {
-    [SerializeField]
-    private Sword m_Sword;
+    [SerializeField] private BaseWeapon m_WeaponToEquip;
 
     private Transform m_PlayerHand;
     private BaseWeapon m_EquippedWeapon;
@@ -42,7 +41,7 @@ public class WeaponController : MonoBehaviour
 
         Debug.Log("Weapon equipped!");
         m_EquippedWeapon = Instantiate(
-            m_Sword,
+            m_WeaponToEquip,
             m_PlayerHand.position,
             m_PlayerHand.rotation,
             m_PlayerHand);

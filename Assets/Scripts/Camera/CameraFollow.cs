@@ -73,4 +73,9 @@ public class CameraFollow : MonoBehaviour
         transform.position = Vector3.Lerp(
             transform.position, newCameraPos, m_SmoothSpeed * Time.deltaTime);
     }
+
+    public void SetTarget(Transform newTarget)
+    {
+        m_Target = newTarget;
+    }
 }

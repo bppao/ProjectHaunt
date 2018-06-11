@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 222973501606789698}
   - component: {fileID: 114544350937072218}
   m_Layer: 5
-  m_Name: HealthBarText
+  m_Name: PlayerHealthBarText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 222416415130079334}
   - component: {fileID: 114658706424745498}
   m_Layer: 5
-  m_Name: HealthBarBackground
+  m_Name: PlayerHealthBarBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 222185674815663166}
   - component: {fileID: 114772626341538326}
   m_Layer: 5
-  m_Name: HealthBar
+  m_Name: PlayerHealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

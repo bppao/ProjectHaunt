@@ -5,8 +5,6 @@ using UnityEngine.UI;
 public class BaseCharacter : PlayerController
 {
     [SerializeField] private float m_MaxHealth;
-    [SerializeField] private Image m_HealthBar;
-    [SerializeField] private Image m_DamageImage;
     [SerializeField] private Color m_DamageFlashColor;
     [SerializeField] private float m_DamageFlashSpeed;
     [SerializeField] private float m_RegenerateHealthAmount = 1f;
@@ -18,7 +16,9 @@ public class BaseCharacter : PlayerController
     private PlayerController m_PlayerController;
     private WeaponController m_WeaponController;
     private CameraFollow m_CameraFollow;
-    private Text m_HealthBarText;
+    private Image m_PlayerHealthBar;
+    private Image m_DamageImage;
+    private Text m_PlayerHealthBarText;
     private bool m_Damaged;
     private Coroutine m_RegenerateHealthCoroutine;
 
@@ -32,11 +32,18 @@ public class BaseCharacter : PlayerController
         m_Animator = GetComponent<Animator>();
         m_PlayerController = GetComponent<PlayerController>();
         m_WeaponController = GetComponent<WeaponController>();
+
+        // Get the camera follow component and set its target to the transform of the player
         m_CameraFollow = MainCamera.GetComponent<CameraFollow>();
+        m_CameraFollow.SetTarget(transform);
+
+        // Find the player health bar and damage image objects
+        m_PlayerHealthBar = GameObject.Find("PlayerHealthBar").GetComponent<Image>();
+        m_DamageImage = GameObject.Find("DamageImage").GetComponent<Image>();
 
         m_CurrentHealth = m_MaxHealth;
-        m_HealthBarText = m_HealthBar.GetComponentInChildren<Text>();
-        UpdateHealthBar();
+        m_PlayerHealthBarText = m_PlayerHealthBar.GetComponentInChildren<Text>();
+        UpdatePlayerHealthBar();
 
         // Start the coroutine responsible for gradually regenerating health over time
         m_RegenerateHealthCoroutine = StartCoroutine(RegenerateHealth());
@@ -61,7 +68,7 @@ public class BaseCharacter : PlayerController
         m_CurrentHealth += m_RegenerateHealthAmount;
         m_CurrentHealth = Mathf.Min(m_CurrentHealth, m_MaxHealth);
 
-        UpdateHealthBar();
+        UpdatePlayerHealthBar();
 
         m_RegenerateHealthCoroutine = StartCoroutine(RegenerateHealth());
     }
@@ -71,7 +78,7 @@ public class BaseCharacter : PlayerController
         m_Damaged = true;
         m_CurrentHealth -= damageAmount;
 
-        UpdateHealthBar();
+        UpdatePlayerHealthBar();
 
         if (!IsAlive)
         {
@@ -94,7 +101,7 @@ public class BaseCharacter : PlayerController
         // Stop the health regeneration coroutine and update the health bar
         StopCoroutine(m_RegenerateHealthCoroutine);
         m_CurrentHealth = 0f;
-        UpdateHealthBar();
+        UpdatePlayerHealthBar();
 
         // Clear the damage image color
         m_DamageImage.color = Color.clear;
@@ -103,10 +110,10 @@ public class BaseCharacter : PlayerController
         m_Animator.SetTrigger(BASE_CHARACTER_DEATH_ANIM_TRIGGER);
     }
 
-    private void UpdateHealthBar()
+    private void UpdatePlayerHealthBar()
     {
         // Update the player's health bar
-        m_HealthBar.fillAmount = m_CurrentHealth / m_MaxHealth;
-        m_HealthBarText.text = m_CurrentHealth + " / " + m_MaxHealth;
+        m_PlayerHealthBar.fillAmount = m_CurrentHealth / m_MaxHealth;
+        m_PlayerHealthBarText.text = m_CurrentHealth + " / " + m_MaxHealth;
     }
 }
