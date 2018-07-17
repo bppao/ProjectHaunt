@@ -6,6 +6,7 @@ public class WeaponController : MonoBehaviour
 {
     [SerializeField] private BaseWeapon m_WeaponToEquip;
 
+    private GameController m_GameController;
     private Transform m_PlayerHand;
     private BaseWeapon m_EquippedWeapon;
     public BaseWeapon EquippedWeapon { get { return m_EquippedWeapon; } }
@@ -13,8 +14,11 @@ public class WeaponController : MonoBehaviour
 
     private void Start()
     {
+        m_GameController = FindObjectOfType<GameController>();
+
         // Find the player hand transform
-        m_PlayerHand = GameObject.Find(name + "Hand").transform;
+        m_PlayerHand = GameObject.Find(
+            m_GameController.SelectedCharacterClass + "Hand").transform;
     }
 
     private void Update()

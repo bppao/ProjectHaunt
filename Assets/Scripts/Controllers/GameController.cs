@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -8,8 +9,11 @@ public class GameController : MonoBehaviour
     [SerializeField] private int m_TotalNumEnemiesSpawned = 5;
     [SerializeField] [Tooltip("In seconds")] private int m_SpawnWindowLength = 60;
 
+    [SerializeField] private List<BaseCharacter> m_CharacterClassPrefabs;
+
     private GameController m_Instance;
     private EnemySpawner[] m_EnemySpawners;
+    [HideInInspector] public string SelectedCharacterClass;
 
     private void Awake()
     {
@@ -22,7 +26,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        m_EnemySpawners = FindObjectsOfType<EnemySpawner>();
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Update()
@@ -45,5 +49,40 @@ public class GameController : MonoBehaviour
                 enemySpawner.EnableSpawner(false);
             }
         }
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "03 Game")
+        {
+            // Grab all of the enemy spawners
+            m_EnemySpawners = FindObjectsOfType<EnemySpawner>();
+
+            // Find the player start transform as well as the character prefab of
+            // the class the user selected to play
+            Transform playerStart = GameObject.Find("PlayerStart").transform;
+            BaseCharacter selectedCharacter = GetSelectedCharacter();
+            if (selectedCharacter == null)
+            {
+                Debug.LogError("Selected character is null!");
+                return;
+            }
+
+            // Spawn the character at player start
+            Instantiate(selectedCharacter, playerStart.position, playerStart.rotation);
+        }
+    }
+
+    private BaseCharacter GetSelectedCharacter()
+    {
+        BaseCharacter selectedCharacter = null;
+        foreach (BaseCharacter character in m_CharacterClassPrefabs)
+        {
+            if (character == null) continue;
+            if (character.GetType().ToString() != SelectedCharacterClass) continue;
+            selectedCharacter = character;
+            break;
+        }
+        return selectedCharacter;
     }
 }
