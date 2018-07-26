@@ -18,8 +18,8 @@ EditorBuildSettings:
     path: Assets/_Scenes/02 Character Select.unity
     guid: 7040e3b167d68f949a9e118f9d19424a
   - enabled: 1
-    path: Assets/_Scenes/03 Game.unity
-    guid: 10a0a5ad9444e4244a2fff518333efaf
+    path: Assets/_Scenes/03 Low-Poly Game Terrain.unity
+    guid: 3036c0ba6097f2a4496aae373edbb5a7
   - enabled: 1
     path: Assets/_Scenes/04a Win.unity
     guid: 1677e0ce8ff6bc54d8a6bb2e2a03bbb2

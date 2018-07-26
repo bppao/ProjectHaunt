@@ -53,7 +53,7 @@ public class GameController : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "03 Game")
+        if (scene.name == "03 Low-Poly Game Terrain")
         {
             // Grab all of the enemy spawners
             m_EnemySpawners = FindObjectsOfType<EnemySpawner>();
