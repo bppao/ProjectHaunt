@@ -13,7 +13,8 @@ public class GameController : MonoBehaviour
 
     private GameController m_Instance;
     private EnemySpawner[] m_EnemySpawners;
-    [HideInInspector] public string SelectedCharacterClass;
+    public string SelectedCharacterClass { get; private set; }
+    public int DayCount { get; private set; }
 
     private void Awake()
     {
@@ -84,5 +85,15 @@ public class GameController : MonoBehaviour
             break;
         }
         return selectedCharacter;
+    }
+
+    public void SetSelectedCharacterClass(string characterClass)
+    {
+        SelectedCharacterClass = characterClass;
+    }
+
+    public void IncrementDayCount()
+    {
+        DayCount++;
     }
 }

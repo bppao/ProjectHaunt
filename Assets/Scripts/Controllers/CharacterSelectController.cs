@@ -119,8 +119,8 @@ public class CharacterSelectController : MonoBehaviour
     private void UpdateSelectionText()
     {
         // Get the character class name from the model transform name and strip the "model"
-        m_GameController.SelectedCharacterClass =
-            m_Characters[m_CurrentCharacterSelection].name.Replace("Model", "");
+        m_GameController.SetSelectedCharacterClass(
+            m_Characters[m_CurrentCharacterSelection].name.Replace("Model", ""));
         m_CharacterNameText.text = m_GameController.SelectedCharacterClass;
 
         // Get the appropriate character class description
